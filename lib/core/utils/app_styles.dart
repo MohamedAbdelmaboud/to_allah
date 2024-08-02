@@ -3,33 +3,37 @@ import 'package:flutter/material.dart';
 abstract class AppStyles {
   /* ----------------- amiri bold style ------------------ */
 
-  static const TextStyle amiriBoldStyle12 = TextStyle(
-      color: Color(0xff1B696F),
-      fontWeight: FontWeight.w500,
-      fontSize: 12,
-      fontFamily: 'Amiri');
+  static const TextStyle amiriStyle12 = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.w500,
+    fontSize: 12,
+    fontFamily: 'Amiri',
+  );
 
-  static const TextStyle amiriBoldStyle14 = TextStyle(
-      color: Color(0xff1B696F),
-      fontWeight: FontWeight.w500,
-      fontSize: 14,
-      fontFamily: 'Amiri');
-  static const TextStyle amiriBoldStyle16 = TextStyle(
-      color: Color(0xff1B696F),
-      fontWeight: FontWeight.w500,
-      fontSize: 16,
-      fontFamily: 'Amiri');
+  static const TextStyle amiriStyle14 = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+    fontFamily: 'Amiri',
+  );
+  static const TextStyle amiriStyle16 = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
+    fontFamily: 'Amiri',
+  );
 
-  static const TextStyle amiriBoldStyle18 = TextStyle(
-      color: Color(0xff1B696F),
+  static const TextStyle amiriStyle18 = TextStyle(
+      color: Colors.black,
       fontWeight: FontWeight.w500,
       fontSize: 18,
       fontFamily: 'Amiri');
-  static const TextStyle amiriBoldStyle20 = TextStyle(
-      color: Color(0xff1B696F),
-      fontWeight: FontWeight.bold,
-      fontSize: 20,
-      fontFamily: 'Amiri');
+  static const TextStyle amiriStyle20 = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.bold,
+    fontSize: 20,
+    fontFamily: 'Amiri',
+  );
 
   //***************** Kufam font styles ************
 // 12

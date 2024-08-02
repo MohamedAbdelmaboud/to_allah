@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:to_allah/core/routing/app_router.dart';
 
 import 'widgets/animated_logo.dart';
 import 'widgets/animated_quran.dart';
@@ -38,9 +39,9 @@ class _SplashViewState extends State<SplashView>
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
-    //Navigate to HomeScreen after 2 seconds
+    // Navigate to login after 2 seconds
     Timer(const Duration(seconds: 2), () {
-      context.go('/HomeScreen');
+      context.go(AppRouter.login);
     });
   }
 
