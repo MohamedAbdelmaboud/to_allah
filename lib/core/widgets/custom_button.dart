@@ -42,7 +42,7 @@ class CustomButton extends StatelessWidget {
           ),
           child: Text(
             buttonText,
-            style: AppStyles.uthmanicStyle18.copyWith(
+            style: AppStyles.kufamStyle14.copyWith(
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:to_allah/core/utils/app_styles.dart';
-import 'package:to_allah/features/home/data/models/azkar_model.dart';
+
+import '../../data/moedls/azkar_model.dart';
 
 class ZakrItem extends StatelessWidget {
   const ZakrItem({

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:to_allah/core/utils/app_styles.dart';
-import 'package:to_allah/features/home/data/models/user_model.dart';
+
+import '../../data/moedls/user_model.dart';
 
 class CustomTableCell extends StatelessWidget {
   const CustomTableCell({

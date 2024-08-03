@@ -5,8 +5,8 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:to_allah/core/routing/app_router.dart';
 
-import 'widgets/animated_logo.dart';
-import 'widgets/animated_quran.dart';
+import '../widgets/animated_logo.dart';
+import '../widgets/animated_quran.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
