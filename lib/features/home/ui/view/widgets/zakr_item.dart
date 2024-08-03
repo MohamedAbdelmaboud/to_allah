@@ -11,20 +11,24 @@ class ZakrItem extends StatelessWidget {
   final AzkarModel azkarModel;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          azkarModel.title,
-          style: AppStyles.kufamStyle12,
-          textDirection: TextDirection.rtl,
-          textAlign: TextAlign.center,
-        ),
-        const Gap(5),
-        Image.asset(
-          azkarModel.imagePath,
-          height: 20,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            azkarModel.title,
+            style: AppStyles.kufamStyle12,
+            textDirection: TextDirection.rtl,
+            textAlign: TextAlign.center,
+          ),
+          const Gap(5),
+          Image.asset(
+            azkarModel.imagePath,
+            height: 20,
+          ),
+        ],
+      ),
     );
   }
 }
