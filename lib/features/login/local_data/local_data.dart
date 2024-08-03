@@ -16,4 +16,16 @@ class LocalData {
   static bool getIsLogin() {
     return _pref.getBool(AppKeys.isLogin) ?? false;
   }
+
+  static Future<void> setUsername(String? username) async {
+    if (username == null) {
+      await _pref.remove(AppKeys.username);
+    } else {
+      await _pref.setString(AppKeys.username, username);
+    }
+  }
+
+  static String? getUsername() {
+    return _pref.getString(AppKeys.username);
+  }
 }

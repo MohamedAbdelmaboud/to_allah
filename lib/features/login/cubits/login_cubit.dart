@@ -8,7 +8,7 @@ part 'login_cubit_state.dart';
 class LoginCubit extends Cubit<LoginCubitState> {
   LoginCubit() : super(LoginInitialState());
 
-  String _email = '';
+  String username = '';
   String _password = '';
 
   void login() async {
@@ -24,8 +24,9 @@ class LoginCubit extends Cubit<LoginCubitState> {
       (users) {
         // Check if the username and password are correct
         for (var user in users) {
-          if (user.username == _email && user.password == _password) {
+          if (user.username == username && user.password == _password) {
             LocalData.setIsLogin(true);
+            LocalData.setUsername(username);
             emit(LoginSuccessState());
             return;
           }
@@ -37,7 +38,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
     );
   }
 
-  void updateEmail(String email) => _email = email;
+  void updateEmail(String email) => username = email;
 
   void updatePassword(String password) => _password = password;
 }
