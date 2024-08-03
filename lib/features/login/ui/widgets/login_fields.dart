@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
-import '../../widgets/custom_text_field.dart';
+import 'package:to_allah/features/login/ui/widgets/custom_text_field.dart';
 
 class LoginFields extends StatelessWidget {
   const LoginFields({

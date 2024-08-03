@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:to_allah/core/routing/app_router.dart';
 import 'package:to_allah/core/widgets/custom_button.dart';
 
-import 'widgets/login_fields.dart';
-import 'widgets/login_logo.dart';
-import 'widgets/login_message.dart';
+import '../widgets/login_fields.dart';
+import '../widgets/login_logo.dart';
+import '../widgets/login_message.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});

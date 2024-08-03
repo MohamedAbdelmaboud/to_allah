@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:to_allah/core/utils/app_images.dart';
 import 'package:to_allah/core/utils/app_styles.dart';
-import 'package:to_allah/features/home/data/models/azkar_model.dart';
+import 'package:to_allah/features/home/data/moedls/azkar_model.dart';
 
 import '../../../../core/utils/app_colors.dart';
-import '../../data/models/user_model.dart';
-import 'widgets/custom_table_cell.dart';
-import 'widgets/table_logo.dart';
-import 'widgets/zakr_item.dart';
-import 'widgets/zakr_table_cell.dart';
+import '../../data/moedls/user_model.dart';
+import '../widgets/custom_table_cell.dart';
+import '../widgets/table_logo.dart';
+import '../widgets/zakr_item.dart';
+import '../widgets/zakr_table_cell.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -61,6 +61,8 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        
         children: [
           const TableLogo(),
           const Gap(10),
