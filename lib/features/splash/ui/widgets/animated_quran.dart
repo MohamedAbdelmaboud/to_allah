@@ -11,7 +11,7 @@ class AnimatedQuran extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
-      style: AppStyles.uthmanicStyle18.copyWith(
+      style: AppStyles.amiriStyle16.copyWith(
         color: Colors.black,
         fontWeight: FontWeight.bold,
       ),

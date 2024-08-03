@@ -68,7 +68,7 @@ class _SplashViewState extends State<SplashView>
                     fadeAnimation: _fadeAnimation,
                     scaleAnimation: _scaleAnimation,
                   ),
-                  const Gap(20),
+                  const Gap(30),
                   const AnimatedQuran(),
                 ],
               ),
