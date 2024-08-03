@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:to_allah/core/utils/app_colors.dart';
-import 'package:to_allah/core/utils/app_styles.dart';
+import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:to_allah/core/routing/app_router.dart';
 import 'package:to_allah/core/widgets/custom_button.dart';
-import 'package:to_allah/features/login/ui/view/widgets/custom_text_field.dart';
 
-import '../../../../core/utils/app_images.dart';
+import 'widgets/login_fields.dart';
+import 'widgets/login_logo.dart';
+import 'widgets/login_message.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -14,31 +16,25 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Image.asset(
-            Assets.assetsImagesLogo,
-            height: 100,
-          ),
-          Text(
-            loginMessage,
-            style: AppStyles.amiriStyle16.copyWith(
-              color: AppColors.secondaryColor.withOpacity(0.6),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const LoginLogo(),
+            const Gap(20),
+            const LoginMessage(loginMessage: loginMessage),
+            const Gap(20),
+            const LoginFields(),
+            const Gap(15),
+            CustomButton(
+              buttonText: 'تسجيل الدخول',
+              onTap: () {
+                context.push(AppRouter.home);
+              },
             ),
-            textDirection: TextDirection.rtl,
-            textAlign: TextAlign.center,
-          ),
-          const CustomTextField(
-            labeltext: 'البريد الإلكتروني',
-          ),
-          const CustomTextField(
-            labeltext: 'كلمة المرور',
-          ),
-          CustomButton(
-            buttonText: 'تسجيل الدخول',
-            onTap: () {},
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
