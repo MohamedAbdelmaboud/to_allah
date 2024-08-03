@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:to_allah/features/login/local_data/local_data.dart';
 
 import '../../../core/services/firestore_services.dart';
 
@@ -24,6 +25,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
         // Check if the username and password are correct
         for (var user in users) {
           if (user.username == _email && user.password == _password) {
+            LocalData.setIsLogin(true);
             emit(LoginSuccessState());
             return;
           }
