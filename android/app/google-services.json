@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "997814723101",
+    "project_id": "to-allah",
+    "storage_bucket": "to-allah.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997814723101:android:fb04a24384e0cc93a69cf4",
+        "android_client_info": {
+          "package_name": "com.example.to_allah"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB39TQO0w5WhnKjRii41n9btBvOe6EY_6Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
