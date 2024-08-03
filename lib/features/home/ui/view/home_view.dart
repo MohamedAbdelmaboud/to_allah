@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:to_allah/core/utils/app_images.dart';
 import 'package:to_allah/core/utils/app_styles.dart';
+import 'package:to_allah/features/home/data/models/azkar_model.dart';
 
 import '../../../../core/utils/app_colors.dart';
 import '../../data/models/user_model.dart';
 import 'widgets/table_logo.dart';
+import 'widgets/zakr_item.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -14,16 +17,40 @@ class HomeView extends StatelessWidget {
     ];
   }
 
-  List<String> get azkar {
+  List<AzkarModel> get azkarList {
     return [
-      'اذكار الصباح',
-      'الصلاه في المسجد',
-      'الصلاه من اول ركعه',
-      'السنن المؤكده',
-      'الصلاه علي النبي',
-      'ورد القران',
-      'اذكار المساء',
-      'قيام الليل',
+      AzkarModel(
+        title: 'اذكار الصباح',
+        imagePath: Assets.assetsImagesAzkar,
+      ),
+      AzkarModel(
+        title: 'الصلاه في المسجد',
+        imagePath: Assets.assetsImagesPrayer,
+      ),
+      AzkarModel(
+        title: 'الصلاه من اول ركعه',
+        imagePath: Assets.assetsImagesPrayer,
+      ),
+      AzkarModel(
+        title: 'السنن المؤكده',
+        imagePath: Assets.assetsImagesPrayer,
+      ),
+      AzkarModel(
+        title: 'الصلاه علي النبي',
+        imagePath: Assets.assetsImagesBeads,
+      ),
+      AzkarModel(
+        title: 'ورد القران',
+        imagePath: Assets.assetsImagesLogo,
+      ),
+      AzkarModel(
+        title: 'اذكار المساء',
+        imagePath: Assets.assetsImagesAzkar,
+      ),
+      AzkarModel(
+        title: 'قيام الليل',
+        imagePath: Assets.assetsImagesNight,
+      ),
     ];
   }
 
@@ -34,7 +61,7 @@ class HomeView extends StatelessWidget {
         children: [
           const TableLogo(),
           DataTable(
-          dividerThickness: 0.8,
+            dividerThickness: 0.8,
             border: TableBorder.all(
               color: AppColors.secondaryColor.withOpacity(0.6),
             ),
@@ -44,7 +71,7 @@ class HomeView extends StatelessWidget {
               ),
               buildDataColumn('الذكر'),
             ],
-            rows: azkar
+            rows: azkarList
                 .map(
                   (zakr) => buildZakrRow(zakr),
                 )
@@ -55,24 +82,27 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  DataRow buildZakrRow(String zakrTitle) {
+  DataRow buildZakrRow(AzkarModel azkarModel) {
     return DataRow(cells: [
       const DataCell(Text('Mohamed')),
       const DataCell(Text('25')),
-      buildZakrTitle(zakrTitle),
+      buildZakrItem(azkarModel),
     ]);
   }
 
-  DataCell buildZakrTitle(String zakrTitle) => DataCell(Text(
-        zakrTitle,
-        style: AppStyles.kufamStyle12,
-      ));
+  DataCell buildZakrItem(AzkarModel azkarModel) => DataCell(
+        ZakrItem(
+          azkarModel: azkarModel,
+        ),
+      );
 
   DataColumn buildDataColumn(String name) {
     return DataColumn(
       label: Text(
         name,
+        textDirection: TextDirection.rtl,
         style: AppStyles.kufamStyle14,
+        textAlign: TextAlign.center,
       ),
     );
   }
