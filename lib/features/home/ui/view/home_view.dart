@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:to_allah/core/utils/app_images.dart';
-import 'package:to_allah/core/utils/app_styles.dart';
-import 'package:to_allah/features/home/data/moedls/azkar_model.dart';
+import 'package:to_allah/core/extesions/snack_bar_extension.dart';
+import 'package:to_allah/features/home/data/models/table_row_info.dart';
+import 'package:to_allah/features/home/data/models/user_data_model.dart';
 
 import '../../../../core/utils/app_colors.dart';
-import '../../data/moedls/user_model.dart';
+import '../../../../core/utils/app_styles.dart';
+import '../../data/cubits/home_cubit.dart';
 import '../widgets/custom_table_cell.dart';
 import '../widgets/table_logo.dart';
 import '../widgets/zakr_item.dart';
@@ -13,145 +15,186 @@ import '../widgets/zakr_table_cell.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
-  List<UserModel> get users {
-    return [
-      UserModel(name: 'عبده'),
-      UserModel(name: 'رشد'),
-    ];
-  }
-
-  List<AzkarModel> get azkarList {
-    return [
-      AzkarModel(
-        title: 'اذكار الصباح',
-        imagePath: Assets.assetsImagesAzkar,
-      ),
-      AzkarModel(
-        title: 'الصلاه في المسجد',
-        imagePath: Assets.assetsImagesPrayer,
-      ),
-      AzkarModel(
-        title: 'الصلاه من اول ركعه',
-        imagePath: Assets.assetsImagesPrayer,
-      ),
-      AzkarModel(
-        title: 'السنن المؤكده',
-        imagePath: Assets.assetsImagesPrayer,
-      ),
-      AzkarModel(
-        title: 'الصلاه علي النبي',
-        imagePath: Assets.assetsImagesBeads,
-      ),
-      AzkarModel(
-        title: 'ورد القران',
-        imagePath: Assets.assetsImagesLogo,
-      ),
-      AzkarModel(
-        title: 'اذكار المساء',
-        imagePath: Assets.assetsImagesAzkar,
-      ),
-      AzkarModel(
-        title: 'قيام الليل',
-        imagePath: Assets.assetsImagesNight,
-      ),
-    ];
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        
-        children: [
-          const TableLogo(),
-          const Gap(10),
-          SizedBox(
-            width: double.infinity,
-            child: Table(
-                textDirection: TextDirection.rtl,
-                defaultColumnWidth: const IntrinsicColumnWidth(),
-                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                border: TableBorder.all(
-                  color: AppColors.secondaryColor.withOpacity(0.6),
-                ),
-                children: [
-                  buildTableHeader(),
-                  ...azkarList.map(
-                    (zakr) => TableRow(
-                      children: [
-                        TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-                          child: ZakrItem(
-                            azkarModel: zakr,
-                          ),
-                        ),
-                        ...users.map(
-                          (model) => const TableCell(
-                            child: Text(
-                              '',
-                              style: AppStyles.kufamStyle14,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ]),
-          ),
-        ],
+      body: BlocListener<HomeCubit, HomeCubitState>(
+        listener: (context, state) {
+          if (state is HomeErrorState) {
+            context.showSnackBar(message: state.message);
+          }
+        },
+        child: const HomeViewBody(),
       ),
     );
   }
+}
 
-  TableRow buildTableHeader() {
+class HomeViewBody extends StatelessWidget {
+  const HomeViewBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TableLogo(),
+        Gap(10),
+        HomeTableBody(),
+      ],
+    );
+  }
+}
+
+class HomeTableBody extends StatelessWidget {
+  const HomeTableBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HomeCubit, HomeCubitState>(
+      builder: (context, state) {
+        if (state is HomeLoadingState) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        final cubit = context.read<HomeCubit>();
+        return SizedBox(
+          width: double.infinity,
+          child: Table(
+            textDirection: TextDirection.rtl,
+            defaultColumnWidth: const IntrinsicColumnWidth(),
+            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+            border: TableBorder.all(
+              color: AppColors.secondaryColor.withOpacity(0.6),
+            ),
+            children: [
+              _buildTableHeader(cubit.usersData),
+              _buildMorningAzkar(cubit),
+              _buildPrayInMasjid(cubit),
+              _buildTakberElehram(cubit),
+              _buildSunnah(cubit),
+              _buildPrayInNabi(cubit),
+              _buildQuranVerse(cubit),
+              _buildEveningAzkar(cubit),
+              _buildMidnightQiam(cubit),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  TableRow _buildTableHeader(List<UserDataModel> users) {
     return TableRow(
       children: [
         const ZakrTableCell(),
         ...users.map(
-          (model) => CustomTableCell(userModel: model),
+          (model) => CustomTableCell(username: model.username),
         ),
       ],
     );
   }
 
-  // i used dataTable but was not able to make it work well
+  TableRow _buildTableRow({
+    required TableRowInfo azkarModel,
+    required List<String> values,
+    required List<Function()> onTaps,
+    required int lengthOfUsers,
+  }) {
+    return TableRow(
+      children: [
+        TableCell(
+          verticalAlignment: TableCellVerticalAlignment.middle,
+          child: ZakrItem(
+            azkarModel: azkarModel,
+          ),
+        ),
+        ...List.generate(
+          lengthOfUsers,
+          (index) => GestureDetector(
+            onTap: onTaps[index],
+            child: TableCell(
+              child: Text(
+                values[index],
+                style: AppStyles.kufamStyle14,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
-  // columns: [
-  //   ...users.map(
-  //     (model) => buildDataColumn(model.name),
-  //   ),
-  //   buildDataColumn('الذكر'),
-  // ],
-  // rows: azkarList
-  //     .map(
-  //       (zakr) => buildZakrRow(zakr),
-  //     )
-  //     .toList(),
+  TableRow _buildMorningAzkar(HomeCubit cubit) {
+    return _buildTableRow(
+      azkarModel: cubit.getTableMorningAzkarInfo(),
+      values: cubit.getTableMorningAzkarValues(),
+      onTaps: cubit.getTableMorningAzkarOnTaps(),
+      lengthOfUsers: cubit.usersData.length,
+    );
+  }
 
-  // DataRow buildZakrRow(AzkarModel azkarModel) {
-  //   return DataRow(cells: [
-  //     const DataCell(Text('Mohamed')),
-  //     const DataCell(Text('25')),
-  //     buildZakrItem(azkarModel),
-  //   ]);
-  // }
+  TableRow _buildPrayInMasjid(HomeCubit cubit) {
+    return _buildTableRow(
+      azkarModel: cubit.getTablePrayInMasjidInfo(),
+      values: cubit.getTablePrayInMasjidValues(),
+      onTaps: cubit.getTablePrayInMasjidOnTaps(),
+      lengthOfUsers: cubit.usersData.length,
+    );
+  }
 
-  // DataCell buildZakrItem(AzkarModel azkarModel) => DataCell(
-  //       ZakrItem(
-  //         azkarModel: azkarModel,
-  //       ),
-  //     );
+  TableRow _buildTakberElehram(HomeCubit cubit) {
+    return _buildTableRow(
+      azkarModel: cubit.getTableTakberElehramInfo(),
+      values: cubit.getTableTakberElehramValues(),
+      onTaps: cubit.getTableTakberElehramOnTaps(),
+      lengthOfUsers: cubit.usersData.length,
+    );
+  }
 
-  // DataColumn buildDataColumn(String name) {
-  //   return DataColumn(
-  //     label: Text(
-  //       name,
-  //       textDirection: TextDirection.rtl,
-  //       style: AppStyles.kufamStyle14,
-  //       textAlign: TextAlign.center,
-  //     ),
-  //   );
-  // }
+  TableRow _buildSunnah(HomeCubit cubit) {
+    return _buildTableRow(
+      azkarModel: cubit.getTableSunnahInfo(),
+      values: cubit.getTableSunnahValues(),
+      onTaps: cubit.getTableSunnahOnTaps(),
+      lengthOfUsers: cubit.usersData.length,
+    );
+  }
+
+  TableRow _buildPrayInNabi(HomeCubit cubit) {
+    return _buildTableRow(
+      azkarModel: cubit.getTablePrayInNabiInfo(),
+      values: cubit.getTablePrayInNabiValues(),
+      onTaps: cubit.getTablePrayInNabiOnTaps(),
+      lengthOfUsers: cubit.usersData.length,
+    );
+  }
+
+  TableRow _buildQuranVerse(HomeCubit cubit) {
+    return _buildTableRow(
+      azkarModel: cubit.getTableQuranVerseInfo(),
+      values: cubit.getTableQuranVerseValues(),
+      onTaps: cubit.getTableQuranVerseOnTaps(),
+      lengthOfUsers: cubit.usersData.length,
+    );
+  }
+
+  TableRow _buildEveningAzkar(HomeCubit cubit) {
+    return _buildTableRow(
+      azkarModel: cubit.getTableEveningAzkarInfo(),
+      values: cubit.getTableEveningAzkarValues(),
+      onTaps: cubit.getTableEveningAzkarOnTaps(),
+      lengthOfUsers: cubit.usersData.length,
+    );
+  }
+
+  TableRow _buildMidnightQiam(HomeCubit cubit) {
+    return _buildTableRow(
+      azkarModel: cubit.getTableMidnightQiamInfo(),
+      values: cubit.getTableMidnightQiamValues(),
+      onTaps: cubit.getTableMidnightQiamOnTaps(),
+      lengthOfUsers: cubit.usersData.length,
+    );
+  }
 }

@@ -3,38 +3,57 @@ import 'package:dartz/dartz.dart';
 import 'package:to_allah/core/helpers/print.dart';
 import 'package:to_allah/core/models/failure.dart';
 import 'package:to_allah/core/utils/app_keys.dart';
+import 'package:to_allah/features/home/data/models/table_data_model.dart';
+import 'package:to_allah/features/home/data/models/user_data_model.dart';
 
 import '../../features/login/models/user_auth.dart';
 
 class FirestoreServices {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  static Future<QuerySnapshot<Map<String, dynamic>>> _getCollection({
-    required String collectionName,
-  }) async {
-    return await _firestore.collection(collectionName).get();
-  }
-
-  static Future<DocumentSnapshot<Map<String, dynamic>>> _getDocument({
-    required String collectionName,
-    required String documentId,
-  }) async {
-    return await _firestore.collection(collectionName).doc(documentId).get();
-  }
-
-  static Future<void> _addDocument({
-    required String collectionName,
-    required Map<String, dynamic> data,
-  }) async {
-    await _firestore.collection(collectionName).add(data);
-  }
-
   static Future<Either<Failure, List<UserAuth>>> getUserAuthList() async {
     try {
-      final snapshot = await _getCollection(collectionName: AppKeys.userAuth);
+      final snapshot = await _firestore.collection(AppKeys.userAuth).get();
       final users =
           snapshot.docs.map((doc) => UserAuth.fromJson(doc.data())).toList();
       return right(users);
+    } on Exception catch (e) {
+      Print.error(e.toString());
+      return left(Failure(e.toString()));
+    }
+  }
+
+  static Future<Either<Failure, List<UserDataModel>>> getUsersData() async {
+    try {
+      // Get the list of users
+      final usersSnapshot =
+          await _firestore.collection(AppKeys.usersData).get();
+
+      final List<UserDataModel> usersData = [];
+      // Loop through each user
+      for (final doc in usersSnapshot.docs) {
+        // Get snapshot of table data
+        final userSnapshot = await _firestore
+            .collection(AppKeys.usersData)
+            .doc(doc.id)
+            .collection(AppKeys.tableData)
+            .get();
+
+        // Convert the table data snapshot to a list
+        final tableData = userSnapshot.docs
+            .map((doc) => TableDataModel.fromJson(doc.data()))
+            .toList();
+
+        // Create the user data model
+        final userData = UserDataModel(
+          username: doc.id,
+          data: tableData,
+        );
+
+        // Add the user data to the list
+        usersData.add(userData);
+      }
+      return right(usersData);
     } on Exception catch (e) {
       Print.error(e.toString());
       return left(Failure(e.toString()));
