@@ -1,8 +1,8 @@
-class AzkarModel {
+class TableRowInfo {
   final String title;
   final String imagePath;
 
-  AzkarModel({
+  TableRowInfo({
     required this.title,
     required this.imagePath,
   });

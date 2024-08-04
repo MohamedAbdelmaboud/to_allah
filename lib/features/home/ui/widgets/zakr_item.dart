@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:to_allah/core/utils/app_styles.dart';
 
-import '../../data/moedls/azkar_model.dart';
+import '../../data/models/table_row_info.dart';
 
 class ZakrItem extends StatelessWidget {
   const ZakrItem({
     super.key,
     required this.azkarModel,
   });
-  final AzkarModel azkarModel;
+  final TableRowInfo azkarModel;
   @override
   Widget build(BuildContext context) {
     return Padding(
