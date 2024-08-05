@@ -12,9 +12,11 @@ part 'home_cubit_state.dart';
 class HomeCubit extends Cubit<HomeCubitState> {
   HomeCubit() : super(HomeInitialState());
 
-  late String username;
-  late List<UserDataModel> usersData;
+  late final String username;
+  late final List<UserDataModel> usersData;
+
   int dayIndex = 0;
+  final List<DateTime> days = [];
 
   void init() async {
     emit(HomeLoadingState());
@@ -24,7 +26,12 @@ class HomeCubit extends Cubit<HomeCubitState> {
     usersData[0].data.add(TableDataModel.initial());
     usersData[1].data.add(TableDataModel.initial());
     _sortUsersByUsername();
+    _initDays();
     emit(HomeSuccessState());
+  }
+
+  void updateDayIndex(int dayIndex) {
+    this.dayIndex = dayIndex;
   }
 
   // ** Edit data functions **
@@ -276,6 +283,20 @@ class HomeCubit extends Cubit<HomeCubitState> {
       final user = usersData.removeAt(usernameIndex);
       usersData.insert(0, user);
     }
+  }
+
+  void _initDays() {
+    emit(HomeLoadingState());
+    // Clear the days list
+    days.clear();
+
+    // Add the days between 2024-05-08 and 2025-01-01
+    for (DateTime day = DateTime(2024, 5, 8);
+        day.isBefore(DateTime(2025, 1, 1));
+        day = day.add(const Duration(days: 1))) {
+      days.add(day);
+    }
+    emit(HomeSuccessState());
   }
 
   bool _isAllowToEdit({required int userIndex}) {

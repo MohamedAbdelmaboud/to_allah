@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:to_allah/features/home/ui/widgets/logout_button.dart';
 import 'package:to_allah/features/home/ui/widgets/table_logo.dart';
 
-import 'home_table_body.dart';
+import 'home_table_page_view.dart';
 
 class HomeViewBody extends StatelessWidget {
   const HomeViewBody({super.key});
@@ -15,7 +15,9 @@ class HomeViewBody extends StatelessWidget {
       children: [
         TableLogo(),
         Gap(10),
-        HomeTableBody(),
+        Expanded(
+          child: HomeTablePageView(),
+        ),
         LogoutButton(),
       ],
     );
