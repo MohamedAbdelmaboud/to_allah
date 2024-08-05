@@ -1,4 +1,6 @@
 class TableDataModel {
+  final int dayIndex;
+  final DateTime dayDate;
   bool morningAzkar;
   int prayInMasjid;
   int takberElehram;
@@ -9,6 +11,8 @@ class TableDataModel {
   bool midnightQiam;
 
   TableDataModel({
+    required this.dayIndex,
+    required this.dayDate,
     required this.morningAzkar,
     required this.prayInMasjid,
     required this.takberElehram,
@@ -19,7 +23,13 @@ class TableDataModel {
     required this.midnightQiam,
   });
 
-  factory TableDataModel.initial() => TableDataModel(
+  factory TableDataModel.initial({
+    required int dayIndex,
+    required DateTime dayDate,
+  }) =>
+      TableDataModel(
+        dayIndex: dayIndex,
+        dayDate: dayDate,
         morningAzkar: false,
         prayInMasjid: 0,
         takberElehram: 0,
@@ -31,6 +41,8 @@ class TableDataModel {
       );
 
   factory TableDataModel.fromJson(Map<String, dynamic> json) => TableDataModel(
+        dayIndex: json["dayIndex"],
+        dayDate: DateTime.parse(json["dayDate"]),
         morningAzkar: json["morningAzkar"],
         prayInMasjid: json["prayInMasjid"],
         takberElehram: json["takberElehram"],
@@ -42,6 +54,8 @@ class TableDataModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "dayIndex": dayIndex,
+        "dayDate": dayDate.toIso8601String(),
         "morningAzkar": morningAzkar,
         "prayInMasjid": prayInMasjid,
         "takberElehram": takberElehram,
@@ -53,6 +67,8 @@ class TableDataModel {
       };
 
   TableDataModel copyWith({
+    int? dayIndex,
+    DateTime? dayDate,
     bool? morningAzkar,
     int? prayInMasjid,
     int? takberElehram,
@@ -63,6 +79,8 @@ class TableDataModel {
     bool? midnightQiam,
   }) {
     return TableDataModel(
+      dayIndex: dayIndex ?? this.dayIndex,
+      dayDate: dayDate ?? this.dayDate,
       morningAzkar: morningAzkar ?? this.morningAzkar,
       prayInMasjid: prayInMasjid ?? this.prayInMasjid,
       takberElehram: takberElehram ?? this.takberElehram,

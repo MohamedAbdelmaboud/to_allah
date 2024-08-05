@@ -16,9 +16,6 @@ class HomeTableBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeCubitState>(
       builder: (context, state) {
-        if (state is HomeLoadingState) {
-          return const Center(child: CircularProgressIndicator());
-        }
         final cubit = context.read<HomeCubit>();
         return SizedBox(
           width: double.infinity,

@@ -18,6 +18,7 @@ class HomeViewBody extends StatelessWidget {
         Expanded(
           child: HomeTablePageView(),
         ),
+        Gap(20),
         LogoutButton(),
       ],
     );

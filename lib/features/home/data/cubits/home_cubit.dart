@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:to_allah/features/home/data/models/day_model.dart';
-import 'package:to_allah/features/home/data/models/table_data_model.dart';
 import 'package:to_allah/features/home/data/models/user_data_model.dart';
 
 import '../../../../core/services/firestore_services.dart';
 import '../../../../core/utils/app_images.dart';
 import '../../../login/local_data/local_data.dart';
+import '../models/day_model.dart';
+import '../models/table_data_model.dart';
 import '../models/table_row_info.dart';
 
 part 'home_cubit_state.dart';
@@ -13,23 +13,15 @@ part 'home_cubit_state.dart';
 class HomeCubit extends Cubit<HomeCubitState> {
   HomeCubit() : super(HomeInitialState());
 
+  int dayIndex = 0;
   late final String username;
   late final List<UserDataModel> usersData;
-
-  int dayIndex = 0;
-  final List<DayModel> days = [];
-  final DateTime _initialDate = DateTime(2024, 8, 5);
-  final DateTime _lastDate = DateTime(2025, 1, 1);
 
   void init() async {
     emit(HomeLoadingState());
     _initUsername();
     await _initUsersData();
-    // TODO delete them after apply firestore
-    usersData[0].data.add(TableDataModel.initial());
-    usersData[1].data.add(TableDataModel.initial());
     _sortUsersByUsername();
-    _initDays();
     emit(HomeSuccessState());
   }
 
@@ -288,15 +280,20 @@ class HomeCubit extends Cubit<HomeCubitState> {
     }
   }
 
-  void _initDays() {
-    emit(HomeLoadingState());
-    // Clear the days list
-    days.clear();
+  bool _isAllowToEdit({required int userIndex}) {
+    return username == usersData[userIndex].username;
+  }
+
+  // We call it only one time to initialize the Firebase Days
+  Future<void> _initializeFirebaseDays() async {
+    final List<DayModel> days = [];
+    final DateTime initialDate = DateTime(2024, 8, 5);
+    final DateTime lastDate = DateTime(2025, 1, 1);
 
     // Add the days between initial date and last date
     int dayIndex = 0;
-    DateTime date = _initialDate;
-    while (date.isBefore(_lastDate)) {
+    DateTime date = initialDate;
+    while (date.isBefore(lastDate)) {
       final dayModel = DayModel(
         index: dayIndex,
         date: date,
@@ -307,10 +304,17 @@ class HomeCubit extends Cubit<HomeCubitState> {
       date = date.add(const Duration(days: 1));
     }
 
-    emit(HomeSuccessState());
-  }
-
-  bool _isAllowToEdit({required int userIndex}) {
-    return username == usersData[userIndex].username;
+    // Add the days to Firestore
+    for (var user in usersData) {
+      for (var day in days) {
+        await FirestoreServices.addDayDoc(
+          username: user.username,
+          tableData: TableDataModel.initial(
+            dayIndex: day.index,
+            dayDate: day.date,
+          ),
+        );
+      }
+    }
   }
 }

@@ -10,6 +10,11 @@ class HomeTablePageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeCubitState>(
       builder: (context, state) {
+        if (state is HomeLoadingState) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
         final cubit = context.read<HomeCubit>();
         return PageView.builder(
           reverse: true,
@@ -17,7 +22,7 @@ class HomeTablePageView extends StatelessWidget {
             return const HomeTableBody();
           },
           onPageChanged: cubit.updateDayIndex,
-          itemCount: cubit.days.length,
+          itemCount: cubit.usersData.first.data.length,
         );
       },
     );
