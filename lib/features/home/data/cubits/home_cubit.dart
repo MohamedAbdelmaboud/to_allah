@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:to_allah/core/helpers/print.dart';
 import 'package:to_allah/features/home/data/models/table_data_model.dart';
 import 'package:to_allah/features/home/data/models/user_data_model.dart';
 
@@ -17,33 +16,14 @@ class HomeCubit extends Cubit<HomeCubitState> {
   late List<UserDataModel> usersData;
   int dayIndex = 0;
 
-  void _initUsername() {
-    emit(HomeLoadingState());
-    username = LocalData.getUsername()!;
-    emit(HomeSuccessState());
-  }
-
-  Future<void> _initUsersData() async {
-    emit(HomeLoadingState());
-    final result = await FirestoreServices.getUsersData();
-    result.fold(
-      (failure) => emit(HomeErrorState(failure.message)),
-      (usersData) {
-        this.usersData = usersData;
-        emit(HomeSuccessState());
-      },
-    );
-  }
-
   void init() async {
     emit(HomeLoadingState());
     _initUsername();
     await _initUsersData();
+    // TODO delete them after apply firestore
     usersData[0].data.add(TableDataModel.initial());
     usersData[1].data.add(TableDataModel.initial());
-    Print.info('users data len: ${usersData.length}');
-    Print.info('user1 : ${usersData[0].data.length}');
-    Print.info('user2: ${usersData[1].data.length}');
+    _sortUsersByUsername();
     emit(HomeSuccessState());
   }
 
@@ -265,6 +245,37 @@ class HomeCubit extends Cubit<HomeCubitState> {
       usersData.length,
       (index) => () => toggleMidnightQiam(userIndex: index),
     );
+  }
+
+  void _initUsername() {
+    emit(HomeLoadingState());
+    username = LocalData.getUsername()!;
+    emit(HomeSuccessState());
+  }
+
+  Future<void> _initUsersData() async {
+    emit(HomeLoadingState());
+    final result = await FirestoreServices.getUsersData();
+    result.fold(
+      (failure) => emit(HomeErrorState(failure.message)),
+      (usersData) {
+        this.usersData = usersData;
+        emit(HomeSuccessState());
+      },
+    );
+  }
+
+  void _sortUsersByUsername() {
+    // Search for the index of the username
+    final usernameIndex = usersData.indexWhere(
+      (user) => user.username == username,
+    );
+
+    // Move it to the top
+    if (usernameIndex != 0) {
+      final user = usersData.removeAt(usernameIndex);
+      usersData.insert(0, user);
+    }
   }
 
   bool _isAllowToEdit({required int userIndex}) {
