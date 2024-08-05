@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:to_allah/core/helpers/print.dart';
-import 'package:to_allah/features/home/data/models/table_data_model.dart';
 import 'package:to_allah/features/home/data/models/user_data_model.dart';
 
 import '../../../../core/services/firestore_services.dart';
 import '../../../../core/utils/app_images.dart';
 import '../../../login/local_data/local_data.dart';
+import '../models/day_model.dart';
+import '../models/table_data_model.dart';
 import '../models/table_row_info.dart';
 
 part 'home_cubit_state.dart';
@@ -13,38 +13,20 @@ part 'home_cubit_state.dart';
 class HomeCubit extends Cubit<HomeCubitState> {
   HomeCubit() : super(HomeInitialState());
 
-  late String username;
-  late List<UserDataModel> usersData;
   int dayIndex = 0;
-
-  void _initUsername() {
-    emit(HomeLoadingState());
-    username = LocalData.getUsername()!;
-    emit(HomeSuccessState());
-  }
-
-  Future<void> _initUsersData() async {
-    emit(HomeLoadingState());
-    final result = await FirestoreServices.getUsersData();
-    result.fold(
-      (failure) => emit(HomeErrorState(failure.message)),
-      (usersData) {
-        this.usersData = usersData;
-        emit(HomeSuccessState());
-      },
-    );
-  }
+  late final String username;
+  late final List<UserDataModel> usersData;
 
   void init() async {
     emit(HomeLoadingState());
     _initUsername();
     await _initUsersData();
-    usersData[0].data.add(TableDataModel.initial());
-    usersData[1].data.add(TableDataModel.initial());
-    Print.info('users data len: ${usersData.length}');
-    Print.info('user1 : ${usersData[0].data.length}');
-    Print.info('user2: ${usersData[1].data.length}');
+    _sortUsersByUsername();
     emit(HomeSuccessState());
+  }
+
+  void updateDayIndex(int dayIndex) {
+    this.dayIndex = dayIndex;
   }
 
   // ** Edit data functions **
@@ -267,7 +249,72 @@ class HomeCubit extends Cubit<HomeCubitState> {
     );
   }
 
+  void _initUsername() {
+    emit(HomeLoadingState());
+    username = LocalData.getUsername()!;
+    emit(HomeSuccessState());
+  }
+
+  Future<void> _initUsersData() async {
+    emit(HomeLoadingState());
+    final result = await FirestoreServices.getUsersData();
+    result.fold(
+      (failure) => emit(HomeErrorState(failure.message)),
+      (usersData) {
+        this.usersData = usersData;
+        emit(HomeSuccessState());
+      },
+    );
+  }
+
+  void _sortUsersByUsername() {
+    // Search for the index of the username
+    final usernameIndex = usersData.indexWhere(
+      (user) => user.username == username,
+    );
+
+    // Move it to the top
+    if (usernameIndex != 0) {
+      final user = usersData.removeAt(usernameIndex);
+      usersData.insert(0, user);
+    }
+  }
+
   bool _isAllowToEdit({required int userIndex}) {
     return username == usersData[userIndex].username;
+  }
+
+  // We call it only one time to initialize the Firebase Days
+  Future<void> _initializeFirebaseDays() async {
+    final List<DayModel> days = [];
+    final DateTime initialDate = DateTime(2024, 8, 5);
+    final DateTime lastDate = DateTime(2025, 1, 1);
+
+    // Add the days between initial date and last date
+    int dayIndex = 0;
+    DateTime date = initialDate;
+    while (date.isBefore(lastDate)) {
+      final dayModel = DayModel(
+        index: dayIndex,
+        date: date,
+      );
+      days.add(dayModel);
+
+      dayIndex++;
+      date = date.add(const Duration(days: 1));
+    }
+
+    // Add the days to Firestore
+    for (var user in usersData) {
+      for (var day in days) {
+        await FirestoreServices.addDayDoc(
+          username: user.username,
+          tableData: TableDataModel.initial(
+            dayIndex: day.index,
+            dayDate: day.date,
+          ),
+        );
+      }
+    }
   }
 }

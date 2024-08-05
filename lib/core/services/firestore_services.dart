@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:to_allah/core/helpers/date_to_string.dart';
 import 'package:to_allah/core/helpers/print.dart';
 import 'package:to_allah/core/models/failure.dart';
 import 'package:to_allah/core/utils/app_keys.dart';
@@ -35,8 +36,8 @@ class FirestoreServices {
         // Get snapshot of table data
         final userSnapshot = await _firestore
             .collection(AppKeys.usersData)
-            .doc(doc.id)
-            .collection(AppKeys.tableData)
+            .doc(doc.id) // doc.id is the username
+            .collection(AppKeys.tablesData)
             .get();
 
         // Convert the table data snapshot to a list
@@ -54,6 +55,24 @@ class FirestoreServices {
         usersData.add(userData);
       }
       return right(usersData);
+    } on Exception catch (e) {
+      Print.error(e.toString());
+      return left(Failure(e.toString()));
+    }
+  }
+
+  static Future<Either<Failure, void>> addDayDoc({
+    required String username,
+    required TableDataModel tableData,
+  }) async {
+    try {
+      _firestore
+          .collection(AppKeys.usersData)
+          .doc(username)
+          .collection(AppKeys.tablesData)
+          .doc(dateToString(tableData.dayDate))
+          .set(tableData.toJson());
+      return right(null);
     } on Exception catch (e) {
       Print.error(e.toString());
       return left(Failure(e.toString()));

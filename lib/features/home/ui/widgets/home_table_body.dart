@@ -16,9 +16,6 @@ class HomeTableBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeCubitState>(
       builder: (context, state) {
-        if (state is HomeLoadingState) {
-          return const Center(child: CircularProgressIndicator());
-        }
         final cubit = context.read<HomeCubit>();
         return SizedBox(
           width: double.infinity,
@@ -58,7 +55,7 @@ class HomeTableBody extends StatelessWidget {
   }
 
   TableRow _buildTableRow({
-    required TableRowInfo azkarModel,
+    required TableRowInfo tableRowInfo,
     required List<String> values,
     required List<Function()> onTaps,
     required int lengthOfUsers,
@@ -68,14 +65,14 @@ class HomeTableBody extends StatelessWidget {
         TableCell(
           verticalAlignment: TableCellVerticalAlignment.middle,
           child: ZakrItem(
-            azkarModel: azkarModel,
+            azkarModel: tableRowInfo,
           ),
         ),
         ...List.generate(
           lengthOfUsers,
-          (index) => GestureDetector(
-            onTap: onTaps[index],
-            child: TableCell(
+          (index) => TableCell(
+            child: GestureDetector(
+              onTap: onTaps[index],
               child: Text(
                 values[index],
                 style: AppStyles.kufamStyle14,
@@ -90,7 +87,7 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildMorningAzkar(HomeCubit cubit) {
     return _buildTableRow(
-      azkarModel: cubit.getTableMorningAzkarInfo(),
+      tableRowInfo: cubit.getTableMorningAzkarInfo(),
       values: cubit.getTableMorningAzkarValues(),
       onTaps: cubit.getTableMorningAzkarOnTaps(),
       lengthOfUsers: cubit.usersData.length,
@@ -99,7 +96,7 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildPrayInMasjid(HomeCubit cubit) {
     return _buildTableRow(
-      azkarModel: cubit.getTablePrayInMasjidInfo(),
+      tableRowInfo: cubit.getTablePrayInMasjidInfo(),
       values: cubit.getTablePrayInMasjidValues(),
       onTaps: cubit.getTablePrayInMasjidOnTaps(),
       lengthOfUsers: cubit.usersData.length,
@@ -108,7 +105,7 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildTakberElehram(HomeCubit cubit) {
     return _buildTableRow(
-      azkarModel: cubit.getTableTakberElehramInfo(),
+      tableRowInfo: cubit.getTableTakberElehramInfo(),
       values: cubit.getTableTakberElehramValues(),
       onTaps: cubit.getTableTakberElehramOnTaps(),
       lengthOfUsers: cubit.usersData.length,
@@ -117,7 +114,7 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildSunnah(HomeCubit cubit) {
     return _buildTableRow(
-      azkarModel: cubit.getTableSunnahInfo(),
+      tableRowInfo: cubit.getTableSunnahInfo(),
       values: cubit.getTableSunnahValues(),
       onTaps: cubit.getTableSunnahOnTaps(),
       lengthOfUsers: cubit.usersData.length,
@@ -126,7 +123,7 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildPrayInNabi(HomeCubit cubit) {
     return _buildTableRow(
-      azkarModel: cubit.getTablePrayInNabiInfo(),
+      tableRowInfo: cubit.getTablePrayInNabiInfo(),
       values: cubit.getTablePrayInNabiValues(),
       onTaps: cubit.getTablePrayInNabiOnTaps(),
       lengthOfUsers: cubit.usersData.length,
@@ -135,7 +132,7 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildQuranVerse(HomeCubit cubit) {
     return _buildTableRow(
-      azkarModel: cubit.getTableQuranVerseInfo(),
+      tableRowInfo: cubit.getTableQuranVerseInfo(),
       values: cubit.getTableQuranVerseValues(),
       onTaps: cubit.getTableQuranVerseOnTaps(),
       lengthOfUsers: cubit.usersData.length,
@@ -144,7 +141,7 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildEveningAzkar(HomeCubit cubit) {
     return _buildTableRow(
-      azkarModel: cubit.getTableEveningAzkarInfo(),
+      tableRowInfo: cubit.getTableEveningAzkarInfo(),
       values: cubit.getTableEveningAzkarValues(),
       onTaps: cubit.getTableEveningAzkarOnTaps(),
       lengthOfUsers: cubit.usersData.length,
@@ -153,7 +150,7 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildMidnightQiam(HomeCubit cubit) {
     return _buildTableRow(
-      azkarModel: cubit.getTableMidnightQiamInfo(),
+      tableRowInfo: cubit.getTableMidnightQiamInfo(),
       values: cubit.getTableMidnightQiamValues(),
       onTaps: cubit.getTableMidnightQiamOnTaps(),
       lengthOfUsers: cubit.usersData.length,
