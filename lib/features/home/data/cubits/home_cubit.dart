@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:to_allah/features/home/data/models/day_model.dart';
 import 'package:to_allah/features/home/data/models/table_data_model.dart';
 import 'package:to_allah/features/home/data/models/user_data_model.dart';
 
@@ -16,7 +17,9 @@ class HomeCubit extends Cubit<HomeCubitState> {
   late final List<UserDataModel> usersData;
 
   int dayIndex = 0;
-  final List<DateTime> days = [];
+  final List<DayModel> days = [];
+  final DateTime _initialDate = DateTime(2024, 8, 5);
+  final DateTime _lastDate = DateTime(2025, 1, 1);
 
   void init() async {
     emit(HomeLoadingState());
@@ -290,12 +293,20 @@ class HomeCubit extends Cubit<HomeCubitState> {
     // Clear the days list
     days.clear();
 
-    // Add the days between 2024-05-08 and 2025-01-01
-    for (DateTime day = DateTime(2024, 5, 8);
-        day.isBefore(DateTime(2025, 1, 1));
-        day = day.add(const Duration(days: 1))) {
-      days.add(day);
+    // Add the days between initial date and last date
+    int dayIndex = 0;
+    DateTime date = _initialDate;
+    while (date.isBefore(_lastDate)) {
+      final dayModel = DayModel(
+        index: dayIndex,
+        date: date,
+      );
+      days.add(dayModel);
+
+      dayIndex++;
+      date = date.add(const Duration(days: 1));
     }
+
     emit(HomeSuccessState());
   }
 
