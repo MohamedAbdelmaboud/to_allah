@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:to_allah/core/routing/app_router.dart';
+import 'package:to_allah/features/login/local_data/local_data.dart';
 
 import '../widgets/animated_logo.dart';
 import '../widgets/animated_quran.dart';
@@ -41,7 +42,10 @@ class _SplashViewState extends State<SplashView>
 
     // Navigate to login after 2 seconds
     Timer(const Duration(seconds: 2), () {
-      context.go(AppRouter.login);
+      // LocalData.setIsLogin(false); // TODO : Remove this after testing
+      LocalData.getIsLogin()
+          ? context.go(AppRouter.home)
+          : context.go(AppRouter.login);
     });
   }
 
