@@ -22,6 +22,7 @@ class HomeCubit extends Cubit<HomeCubitState> {
     _initUsername();
     await _initUsersData();
     _sortUsersByUsername();
+    _initializeFirebaseDays();
     emit(HomeSuccessState());
   }
 
@@ -249,6 +250,9 @@ class HomeCubit extends Cubit<HomeCubitState> {
     );
   }
 
+  List<DateTime> get dates =>
+      usersData.first.data.map((dayData) => dayData.dayDate).toList();
+
   void _initUsername() {
     emit(HomeLoadingState());
     username = LocalData.getUsername()!;
@@ -287,12 +291,13 @@ class HomeCubit extends Cubit<HomeCubitState> {
   // We call it only one time to initialize the Firebase Days
   Future<void> _initializeFirebaseDays() async {
     final List<DayModel> days = [];
-    final DateTime initialDate = DateTime(2024, 8, 5);
+    final DateTime initialDate = DateTime(2024, 8, 9);
     final DateTime lastDate = DateTime(2025, 1, 1);
 
     // Add the days between initial date and last date
     int dayIndex = 0;
-    DateTime date = initialDate;
+    late DateTime date;
+    date = initialDate;
     while (date.isBefore(lastDate)) {
       final dayModel = DayModel(
         index: dayIndex,
