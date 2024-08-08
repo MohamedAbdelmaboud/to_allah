@@ -33,11 +33,12 @@ class FirestoreServices {
       final List<UserDataModel> usersData = [];
       // Loop through each user
       for (final doc in usersSnapshot.docs) {
-        // Get snapshot of table data
+        // Get snapshot of table data sorted by dayIndex
         final userSnapshot = await _firestore
             .collection(AppKeys.usersData)
             .doc(doc.id) // doc.id is the username
             .collection(AppKeys.tablesData)
+            .orderBy('dayIndex')
             .get();
 
         // Convert the table data snapshot to a list
@@ -78,4 +79,23 @@ class FirestoreServices {
       return left(Failure(e.toString()));
     }
   }
+
+  static Future<Either<Failure, void>> updateTableData({
+    required String username,
+    required TableDataModel tableData,
+  }) async {
+    try {
+      _firestore
+          .collection(AppKeys.usersData)
+          .doc(username)
+          .collection(AppKeys.tablesData)
+          .doc(dateToString(tableData.dayDate))
+          .update(tableData.toJson());
+      return right(null);
+    } on Exception catch (e) {
+      Print.error(e.toString());
+      return left(Failure(e.toString()));
+    }
+  }
+
 }

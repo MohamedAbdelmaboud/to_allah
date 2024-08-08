@@ -22,60 +22,92 @@ class HomeCubit extends Cubit<HomeCubitState> {
     _initUsername();
     await _initUsersData();
     _sortUsersByUsername();
-    _initializeFirebaseDays();
     emit(HomeSuccessState());
   }
 
   void updateDayIndex(int dayIndex) {
     this.dayIndex = dayIndex;
+    emit(HomeSuccessState());
   }
 
   // ** Edit data functions **
-  void toggleMorningAzkar({required int userIndex}) {
+  Future<void> toggleMorningAzkar({required int userIndex}) async {
     if (!_isAllowToEdit(userIndex: userIndex)) return;
     usersData[userIndex].data[dayIndex].toggleMorningAzkar();
+    await FirestoreServices.updateTableData(
+      username: username,
+      tableData: usersData[userIndex].data[dayIndex],
+    );
     emit(HomeSuccessState());
   }
 
-  void incrementPrayInMasjid({required int userIndex}) {
+  Future<void> incrementPrayInMasjid({required int userIndex}) async {
     if (!_isAllowToEdit(userIndex: userIndex)) return;
     usersData[userIndex].data[dayIndex].incrementPrayInMasjid();
+    await FirestoreServices.updateTableData(
+      username: username,
+      tableData: usersData[userIndex].data[dayIndex],
+    );
     emit(HomeSuccessState());
   }
 
-  void incrementTakberElehram({required int userIndex}) {
+  Future<void> incrementTakberElehram({required int userIndex}) async {
     if (!_isAllowToEdit(userIndex: userIndex)) return;
     usersData[userIndex].data[dayIndex].incrementTakberElehram();
+    await FirestoreServices.updateTableData(
+      username: username,
+      tableData: usersData[userIndex].data[dayIndex],
+    );
     emit(HomeSuccessState());
   }
 
-  void incrementSunnah({required int userIndex}) {
+  Future<void> incrementSunnah({required int userIndex}) async {
     if (!_isAllowToEdit(userIndex: userIndex)) return;
     usersData[userIndex].data[dayIndex].incrementSunnah();
+    await FirestoreServices.updateTableData(
+      username: username,
+      tableData: usersData[userIndex].data[dayIndex],
+    );
     emit(HomeSuccessState());
   }
 
-  void togglePrayInNabi({required int userIndex}) {
+  Future<void> togglePrayInNabi({required int userIndex}) async {
     if (!_isAllowToEdit(userIndex: userIndex)) return;
     usersData[userIndex].data[dayIndex].togglePrayInNabi();
+    await FirestoreServices.updateTableData(
+      username: username,
+      tableData: usersData[userIndex].data[dayIndex],
+    );
     emit(HomeSuccessState());
   }
 
-  void toggleQuranVerse({required int userIndex}) {
+  Future<void> toggleQuranVerse({required int userIndex}) async {
     if (!_isAllowToEdit(userIndex: userIndex)) return;
     usersData[userIndex].data[dayIndex].toggleQuranVerse();
+    await FirestoreServices.updateTableData(
+      username: username,
+      tableData: usersData[userIndex].data[dayIndex],
+    );
     emit(HomeSuccessState());
   }
 
-  void toggleMidnightQiam({required int userIndex}) {
+  Future<void> toggleMidnightQiam({required int userIndex}) async {
     if (!_isAllowToEdit(userIndex: userIndex)) return;
     usersData[userIndex].data[dayIndex].toggleMidnightQiam();
+    await FirestoreServices.updateTableData(
+      username: username,
+      tableData: usersData[userIndex].data[dayIndex],
+    );
     emit(HomeSuccessState());
   }
 
-  void toggleEveningAzkar({required int userIndex}) {
+  Future<void> toggleEveningAzkar({required int userIndex}) async {
     if (!_isAllowToEdit(userIndex: userIndex)) return;
     usersData[userIndex].data[dayIndex].toggleEveningAzkar();
+    await FirestoreServices.updateTableData(
+      username: username,
+      tableData: usersData[userIndex].data[dayIndex],
+    );
     emit(HomeSuccessState());
   }
 
