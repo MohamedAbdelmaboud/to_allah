@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:to_allah/features/home/ui/widgets/logout_button.dart';
 import 'package:to_allah/features/home/ui/widgets/table_logo.dart';
 
 import 'home_table_page_view.dart';
@@ -13,15 +12,17 @@ class HomeViewBody extends StatelessWidget {
     return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Gap(100),
         TableLogo(),
         Gap(20),
-        // format date from homecubit
-
         Expanded(
-          child: HomeTablePageView(),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: HomeTablePageView(),
+          ),
         ),
         Gap(20),
-        LogoutButton(),
+        // LogoutButton(),
       ],
     );
   }
