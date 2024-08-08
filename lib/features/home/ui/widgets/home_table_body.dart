@@ -74,7 +74,11 @@ class HomeTableBody extends StatelessWidget {
             child: GestureDetector(
               onTap: onTaps[index],
               child: Text(
-                values[index],
+                values[index] == 'true'
+                    ? '✅'
+                    : values[index] == 'false'
+                        ? '❌'
+                        : values[index],
                 style: AppStyles.kufamStyle14,
                 textAlign: TextAlign.center,
               ),

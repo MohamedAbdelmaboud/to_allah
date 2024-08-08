@@ -43,9 +43,10 @@ class _SplashViewState extends State<SplashView>
     // Navigate to login after 2 seconds
     Timer(const Duration(seconds: 2), () {
       // LocalData.setIsLogin(false); // TODO : Remove this after testing
-      LocalData.getIsLogin()
-          ? context.go(AppRouter.home)
-          : context.go(AppRouter.login);
+      // LocalData.getIsLogin()
+      //     ? context.go(AppRouter.home)
+      //     : context.go(AppRouter.login);
+      context.go(AppRouter.home);
     });
   }
 
@@ -72,7 +73,7 @@ class _SplashViewState extends State<SplashView>
                     fadeAnimation: _fadeAnimation,
                     scaleAnimation: _scaleAnimation,
                   ),
-                  const Gap(20),
+                  const Gap(30),
                   const AnimatedQuran(),
                 ],
               ),

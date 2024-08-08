@@ -14,7 +14,9 @@ class HomeViewBody extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TableLogo(),
-        Gap(10),
+        Gap(20),
+        // format date from homecubit
+
         Expanded(
           child: HomeTablePageView(),
         ),
