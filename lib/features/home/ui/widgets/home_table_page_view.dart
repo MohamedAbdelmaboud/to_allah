@@ -6,6 +6,8 @@ import 'package:to_allah/core/utils/app_styles.dart';
 import 'package:to_allah/features/home/data/cubits/home_cubit.dart';
 import 'package:to_allah/features/home/ui/widgets/home_table_body.dart';
 
+import 'table_shimmer.dart';
+
 class HomeTablePageView extends StatelessWidget {
   const HomeTablePageView({super.key});
 
@@ -14,9 +16,7 @@ class HomeTablePageView extends StatelessWidget {
     return BlocBuilder<HomeCubit, HomeCubitState>(
       builder: (context, state) {
         if (state is HomeLoadingState) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const TableShimmer();
         }
         final cubit = context.read<HomeCubit>();
 
