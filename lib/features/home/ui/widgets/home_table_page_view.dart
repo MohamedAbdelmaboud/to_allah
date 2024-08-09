@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:to_allah/core/helpers/date_to_string.dart';
-import 'package:to_allah/core/utils/app_styles.dart';
 import 'package:to_allah/features/home/data/cubits/home_cubit.dart';
 import 'package:to_allah/features/home/ui/widgets/home_table_body.dart';
 
+import 'home_table_date.dart';
 import 'table_shimmer.dart';
 
 class HomeTablePageView extends StatelessWidget {
@@ -19,18 +18,14 @@ class HomeTablePageView extends StatelessWidget {
           return const TableShimmer();
         }
         final cubit = context.read<HomeCubit>();
-
         return PageView.builder(
           reverse: true,
           itemBuilder: (context, index) {
-            return Column(
+            return const Column(
               children: [
-                Text(
-                  dateToString(cubit.dates[index]), // Display the date
-                  style: AppStyles.kufamStyle14,
-                ),
-                const Gap(10),
-                const HomeTableBody(),
+                HomeTableDate(),
+                Gap(10),
+                HomeTableBody(),
               ],
             );
           },
