@@ -28,6 +28,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  flutter_localizations:
+    sdk: flutter
   animated_text_kit: ^4.2.2
   cloud_firestore: ^5.2.0
   cupertino_icons: ^1.0.6
@@ -92,3 +94,5 @@ flutter_assets:
   assets_path: assets/images/
   output_path: lib/core/utils/
   filename: app_images.dart
+flutter_intl:
+  enabled: true
