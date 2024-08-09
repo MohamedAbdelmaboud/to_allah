@@ -4,10 +4,10 @@ import 'package:to_allah/core/utils/app_colors.dart';
 import 'package:to_allah/core/utils/app_styles.dart';
 import 'package:to_allah/features/home/data/cubits/home_cubit.dart';
 import 'package:to_allah/features/home/data/models/table_row_info.dart';
-import 'package:to_allah/features/home/data/models/user_data_model.dart';
 import 'package:to_allah/features/home/ui/widgets/custom_table_cell.dart';
 import 'package:to_allah/features/home/ui/widgets/zakr_item.dart';
 import 'package:to_allah/features/home/ui/widgets/zakr_table_cell.dart';
+import 'package:to_allah/features/login/models/user_auth.dart';
 
 class HomeTableBody extends StatelessWidget {
   const HomeTableBody({super.key});
@@ -17,8 +17,8 @@ class HomeTableBody extends StatelessWidget {
     return BlocBuilder<HomeCubit, HomeCubitState>(
       builder: (context, state) {
         final cubit = context.read<HomeCubit>();
-        return SizedBox(
-          width: double.infinity,
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           child: Table(
             textDirection: TextDirection.rtl,
             defaultColumnWidth: const IntrinsicColumnWidth(),
@@ -27,7 +27,7 @@ class HomeTableBody extends StatelessWidget {
               color: AppColors.secondaryColor.withOpacity(0.6),
             ),
             children: [
-              _buildTableHeader(cubit.usersData),
+              _buildTableHeader(cubit.usersAuth),
               _buildMorningAzkar(cubit),
               _buildPrayInMasjid(cubit),
               _buildTakberElehram(cubit),
@@ -43,12 +43,12 @@ class HomeTableBody extends StatelessWidget {
     );
   }
 
-  TableRow _buildTableHeader(List<UserDataModel> users) {
+  TableRow _buildTableHeader(List<UserAuth> users) {
     return TableRow(
       children: [
         const ZakrTableCell(),
         ...users.map(
-          (model) => CustomTableCell(username: model.username),
+          (model) => CustomTableCell(username: model.name),
         ),
       ],
     );
@@ -59,6 +59,8 @@ class HomeTableBody extends StatelessWidget {
     required List<String> values,
     required List<Function()> onTaps,
     required int lengthOfUsers,
+    required dynamic trueTarget,
+    required dynamic falseTarget,
   }) {
     return TableRow(
       children: [
@@ -73,14 +75,17 @@ class HomeTableBody extends StatelessWidget {
           (index) => TableCell(
             child: GestureDetector(
               onTap: onTaps[index],
-              child: Text(
-                values[index] == 'true'
-                    ? '✅'
-                    : values[index] == 'false'
-                        ? '❌'
-                        : values[index],
-                style: AppStyles.kufamStyle14,
-                textAlign: TextAlign.center,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  values[index] == trueTarget.toString()
+                      ? '✅'
+                      : values[index] == falseTarget.toString()
+                          ? '❌'
+                          : values[index],
+                  style: AppStyles.kufamStyle14,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
@@ -91,6 +96,8 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildMorningAzkar(HomeCubit cubit) {
     return _buildTableRow(
+      trueTarget: true,
+      falseTarget: false,
       tableRowInfo: cubit.getTableMorningAzkarInfo(),
       values: cubit.getTableMorningAzkarValues(),
       onTaps: cubit.getTableMorningAzkarOnTaps(),
@@ -100,6 +107,8 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildPrayInMasjid(HomeCubit cubit) {
     return _buildTableRow(
+      trueTarget: 5,
+      falseTarget: 0,
       tableRowInfo: cubit.getTablePrayInMasjidInfo(),
       values: cubit.getTablePrayInMasjidValues(),
       onTaps: cubit.getTablePrayInMasjidOnTaps(),
@@ -109,6 +118,8 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildTakberElehram(HomeCubit cubit) {
     return _buildTableRow(
+      trueTarget: 5,
+      falseTarget: 0,
       tableRowInfo: cubit.getTableTakberElehramInfo(),
       values: cubit.getTableTakberElehramValues(),
       onTaps: cubit.getTableTakberElehramOnTaps(),
@@ -118,6 +129,8 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildSunnah(HomeCubit cubit) {
     return _buildTableRow(
+      trueTarget: 12,
+      falseTarget: 0,
       tableRowInfo: cubit.getTableSunnahInfo(),
       values: cubit.getTableSunnahValues(),
       onTaps: cubit.getTableSunnahOnTaps(),
@@ -127,6 +140,8 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildPrayInNabi(HomeCubit cubit) {
     return _buildTableRow(
+      trueTarget: true,
+      falseTarget: false,
       tableRowInfo: cubit.getTablePrayInNabiInfo(),
       values: cubit.getTablePrayInNabiValues(),
       onTaps: cubit.getTablePrayInNabiOnTaps(),
@@ -136,6 +151,8 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildQuranVerse(HomeCubit cubit) {
     return _buildTableRow(
+      trueTarget: true,
+      falseTarget: false,
       tableRowInfo: cubit.getTableQuranVerseInfo(),
       values: cubit.getTableQuranVerseValues(),
       onTaps: cubit.getTableQuranVerseOnTaps(),
@@ -145,6 +162,8 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildEveningAzkar(HomeCubit cubit) {
     return _buildTableRow(
+      trueTarget: true,
+      falseTarget: false,
       tableRowInfo: cubit.getTableEveningAzkarInfo(),
       values: cubit.getTableEveningAzkarValues(),
       onTaps: cubit.getTableEveningAzkarOnTaps(),
@@ -154,6 +173,8 @@ class HomeTableBody extends StatelessWidget {
 
   TableRow _buildMidnightQiam(HomeCubit cubit) {
     return _buildTableRow(
+      trueTarget: true,
+      falseTarget: false,
       tableRowInfo: cubit.getTableMidnightQiamInfo(),
       values: cubit.getTableMidnightQiamValues(),
       onTaps: cubit.getTableMidnightQiamOnTaps(),
