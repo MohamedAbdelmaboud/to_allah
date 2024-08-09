@@ -4,10 +4,10 @@ import 'package:to_allah/core/utils/app_colors.dart';
 import 'package:to_allah/core/utils/app_styles.dart';
 import 'package:to_allah/features/home/data/cubits/home_cubit.dart';
 import 'package:to_allah/features/home/data/models/table_row_info.dart';
-import 'package:to_allah/features/home/data/models/user_data_model.dart';
 import 'package:to_allah/features/home/ui/widgets/custom_table_cell.dart';
 import 'package:to_allah/features/home/ui/widgets/zakr_item.dart';
 import 'package:to_allah/features/home/ui/widgets/zakr_table_cell.dart';
+import 'package:to_allah/features/login/models/user_auth.dart';
 
 class HomeTableBody extends StatelessWidget {
   const HomeTableBody({super.key});
@@ -27,7 +27,7 @@ class HomeTableBody extends StatelessWidget {
               color: AppColors.secondaryColor.withOpacity(0.6),
             ),
             children: [
-              _buildTableHeader(cubit.usersData),
+              _buildTableHeader(cubit.usersAuth),
               _buildMorningAzkar(cubit),
               _buildPrayInMasjid(cubit),
               _buildTakberElehram(cubit),
@@ -43,12 +43,12 @@ class HomeTableBody extends StatelessWidget {
     );
   }
 
-  TableRow _buildTableHeader(List<UserDataModel> users) {
+  TableRow _buildTableHeader(List<UserAuth> users) {
     return TableRow(
       children: [
         const ZakrTableCell(),
         ...users.map(
-          (model) => CustomTableCell(username: model.username),
+          (model) => CustomTableCell(username: model.name),
         ),
       ],
     );
@@ -75,14 +75,17 @@ class HomeTableBody extends StatelessWidget {
           (index) => TableCell(
             child: GestureDetector(
               onTap: onTaps[index],
-              child: Text(
-                values[index] == trueTarget.toString()
-                    ? '✅'
-                    : values[index] == falseTarget.toString()
-                        ? '❌'
-                        : values[index],
-                style: AppStyles.kufamStyle14,
-                textAlign: TextAlign.center,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  values[index] == trueTarget.toString()
+                      ? '✅'
+                      : values[index] == falseTarget.toString()
+                          ? '❌'
+                          : values[index],
+                  style: AppStyles.kufamStyle14,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),

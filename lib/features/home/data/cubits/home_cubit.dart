@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:to_allah/features/home/data/models/user_data_model.dart';
+import 'package:to_allah/features/login/models/user_auth.dart';
 
 import '../../../../core/services/firestore_services.dart';
 import '../../../../core/utils/app_images.dart';
@@ -15,12 +16,14 @@ class HomeCubit extends Cubit<HomeCubitState> {
 
   int dayIndex = 0;
   late final String username;
+  late final List<UserAuth> usersAuth;
   late final List<UserDataModel> usersData;
 
   void init() async {
     emit(HomeLoadingState());
     _initUsername();
     await _initUsersData();
+    await _initUsersAuth();
     _sortUsersByUsername();
     _initializeFirebaseDays();
     emit(HomeSuccessState());
@@ -304,6 +307,18 @@ class HomeCubit extends Cubit<HomeCubitState> {
     );
   }
 
+  Future<void> _initUsersAuth() async {
+    emit(HomeLoadingState());
+    final result = await FirestoreServices.getUserAuthList();
+    result.fold(
+      (failure) => emit(HomeErrorState(failure.message)),
+      (usersAuth) {
+        this.usersAuth = usersAuth;
+        emit(HomeSuccessState());
+      },
+    );
+  }
+
   void _sortUsersByUsername() {
     // Search for the index of the username
     final usernameIndex = usersData.indexWhere(
@@ -314,6 +329,15 @@ class HomeCubit extends Cubit<HomeCubitState> {
     if (usernameIndex != 0) {
       final user = usersData.removeAt(usernameIndex);
       usersData.insert(0, user);
+    }
+
+    // Update the user auth list in the same order
+    for (var user in usersData) {
+      final userAuth = usersAuth.firstWhere(
+        (element) => element.username == user.username,
+      );
+      usersAuth.remove(userAuth);
+      usersAuth.add(userAuth);
     }
   }
 
