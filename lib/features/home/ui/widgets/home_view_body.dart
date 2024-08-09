@@ -12,15 +12,9 @@ class HomeViewBody extends StatelessWidget {
     return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Gap(100),
         TableLogo(),
         Gap(20),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: HomeTablePageView(),
-          ),
-        ),
+        HomeTablePageView(),
         Gap(20),
         // LogoutButton(),
       ],

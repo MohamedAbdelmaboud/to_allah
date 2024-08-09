@@ -1,3 +1,4 @@
+import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -18,7 +19,7 @@ class HomeTablePageView extends StatelessWidget {
           return const TableShimmer();
         }
         final cubit = context.read<HomeCubit>();
-        return PageView.builder(
+        return ExpandablePageView.builder(
           reverse: true,
           itemBuilder: (context, index) {
             return const Column(
