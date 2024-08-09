@@ -17,8 +17,8 @@ class HomeTableBody extends StatelessWidget {
     return BlocBuilder<HomeCubit, HomeCubitState>(
       builder: (context, state) {
         final cubit = context.read<HomeCubit>();
-        return SizedBox(
-          width: double.infinity,
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           child: Table(
             textDirection: TextDirection.rtl,
             defaultColumnWidth: const IntrinsicColumnWidth(),

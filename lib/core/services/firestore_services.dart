@@ -97,5 +97,4 @@ class FirestoreServices {
       return left(Failure(e.toString()));
     }
   }
-
 }

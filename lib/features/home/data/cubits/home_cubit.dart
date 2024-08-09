@@ -22,6 +22,7 @@ class HomeCubit extends Cubit<HomeCubitState> {
     _initUsername();
     await _initUsersData();
     _sortUsersByUsername();
+    _initializeFirebaseDays();
     emit(HomeSuccessState());
   }
 
