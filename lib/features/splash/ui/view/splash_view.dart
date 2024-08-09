@@ -45,7 +45,6 @@ class _SplashViewState extends State<SplashView>
       LocalData.getIsLogin()
           ? context.go(AppRouter.home)
           : context.go(AppRouter.login);
-      context.go(AppRouter.home);
     });
   }
 
