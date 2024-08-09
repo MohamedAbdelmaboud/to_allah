@@ -14,19 +14,19 @@ part 'home_cubit_state.dart';
 class HomeCubit extends Cubit<HomeCubitState> {
   HomeCubit() : super(HomeInitialState());
 
-  int dayIndex = 0;
+  late int dayIndex;
   late final String username;
   late final List<UserAuth> usersAuth;
   late final List<UserDataModel> usersData;
 
-  void init() async {
+  Future<void> init() async {
     emit(HomeLoadingState());
     _initUsername();
     await _initUsersData();
     await _initUsersAuth();
     _sortUsersByUsername();
-    _initializeFirebaseDays();
-    emit(HomeSuccessState());
+    _initDayIndex();
+    emit(HomeLoadedState());
   }
 
   void updateDayIndex(int dayIndex) {
@@ -290,32 +290,22 @@ class HomeCubit extends Cubit<HomeCubitState> {
       usersData.first.data.map((dayData) => dayData.dayDate).toList();
 
   void _initUsername() {
-    emit(HomeLoadingState());
     username = LocalData.getUsername()!;
-    emit(HomeSuccessState());
   }
 
   Future<void> _initUsersData() async {
-    emit(HomeLoadingState());
     final result = await FirestoreServices.getUsersData();
     result.fold(
       (failure) => emit(HomeErrorState(failure.message)),
-      (usersData) {
-        this.usersData = usersData;
-        emit(HomeSuccessState());
-      },
+      (usersData) => this.usersData = usersData,
     );
   }
 
   Future<void> _initUsersAuth() async {
-    emit(HomeLoadingState());
     final result = await FirestoreServices.getUserAuthList();
     result.fold(
       (failure) => emit(HomeErrorState(failure.message)),
-      (usersAuth) {
-        this.usersAuth = usersAuth;
-        emit(HomeSuccessState());
-      },
+      (usersAuth) => this.usersAuth = usersAuth,
     );
   }
 
@@ -339,6 +329,16 @@ class HomeCubit extends Cubit<HomeCubitState> {
       usersAuth.remove(userAuth);
       usersAuth.add(userAuth);
     }
+  }
+
+  void _initDayIndex() {
+    for (var data in usersData.first.data) {
+      if (data.dayDate == DateTime.now()) {
+        dayIndex = data.dayIndex;
+        break;
+      }
+    }
+    dayIndex = 0;
   }
 
   bool _isAllowToEdit({required int userIndex}) {

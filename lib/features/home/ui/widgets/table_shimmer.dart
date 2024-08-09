@@ -13,8 +13,8 @@ class TableShimmer extends StatelessWidget {
           baseColor: Colors.grey[300]!,
           highlightColor: Colors.grey[100]!,
           child: Container(
-            height: 30,
-            width: 180,
+            height: 15,
+            width: 150,
             margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: Colors.grey[300]!,
