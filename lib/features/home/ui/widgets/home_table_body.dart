@@ -29,13 +29,13 @@ class HomeTableBody extends StatelessWidget {
             children: [
               _buildTableHeader(cubit.usersAuth),
               _buildMorningAzkar(cubit),
-              _buildPrayInMasjid(cubit),
-              _buildTakberElehram(cubit),
-              _buildSunnah(cubit),
               _buildPrayInNabi(cubit),
               _buildQuranVerse(cubit),
               _buildEveningAzkar(cubit),
+              _buildPrayInMasjid(cubit),
+              _buildSunnah(cubit),
               _buildMidnightQiam(cubit),
+              _buildReadTabark(cubit),
             ],
           ),
         );
@@ -48,7 +48,7 @@ class HomeTableBody extends StatelessWidget {
       children: [
         const ZakrTableCell(),
         ...users.map(
-          (model) => CustomTableCell(username: model.name),
+          (user) => CustomTableCell(username: user.name),
         ),
       ],
     );
@@ -101,7 +101,7 @@ class HomeTableBody extends StatelessWidget {
       tableRowInfo: cubit.getTableMorningAzkarInfo(),
       values: cubit.getTableMorningAzkarValues(),
       onTaps: cubit.getTableMorningAzkarOnTaps(),
-      lengthOfUsers: cubit.usersData.length,
+      lengthOfUsers: cubit.users.length,
     );
   }
 
@@ -112,18 +112,7 @@ class HomeTableBody extends StatelessWidget {
       tableRowInfo: cubit.getTablePrayInMasjidInfo(),
       values: cubit.getTablePrayInMasjidValues(),
       onTaps: cubit.getTablePrayInMasjidOnTaps(),
-      lengthOfUsers: cubit.usersData.length,
-    );
-  }
-
-  TableRow _buildTakberElehram(HomeCubit cubit) {
-    return _buildTableRow(
-      trueTarget: 5,
-      falseTarget: 0,
-      tableRowInfo: cubit.getTableTakberElehramInfo(),
-      values: cubit.getTableTakberElehramValues(),
-      onTaps: cubit.getTableTakberElehramOnTaps(),
-      lengthOfUsers: cubit.usersData.length,
+      lengthOfUsers: cubit.users.length,
     );
   }
 
@@ -134,7 +123,7 @@ class HomeTableBody extends StatelessWidget {
       tableRowInfo: cubit.getTableSunnahInfo(),
       values: cubit.getTableSunnahValues(),
       onTaps: cubit.getTableSunnahOnTaps(),
-      lengthOfUsers: cubit.usersData.length,
+      lengthOfUsers: cubit.users.length,
     );
   }
 
@@ -145,7 +134,7 @@ class HomeTableBody extends StatelessWidget {
       tableRowInfo: cubit.getTablePrayInNabiInfo(),
       values: cubit.getTablePrayInNabiValues(),
       onTaps: cubit.getTablePrayInNabiOnTaps(),
-      lengthOfUsers: cubit.usersData.length,
+      lengthOfUsers: cubit.users.length,
     );
   }
 
@@ -156,7 +145,7 @@ class HomeTableBody extends StatelessWidget {
       tableRowInfo: cubit.getTableQuranVerseInfo(),
       values: cubit.getTableQuranVerseValues(),
       onTaps: cubit.getTableQuranVerseOnTaps(),
-      lengthOfUsers: cubit.usersData.length,
+      lengthOfUsers: cubit.users.length,
     );
   }
 
@@ -167,7 +156,7 @@ class HomeTableBody extends StatelessWidget {
       tableRowInfo: cubit.getTableEveningAzkarInfo(),
       values: cubit.getTableEveningAzkarValues(),
       onTaps: cubit.getTableEveningAzkarOnTaps(),
-      lengthOfUsers: cubit.usersData.length,
+      lengthOfUsers: cubit.users.length,
     );
   }
 
@@ -178,7 +167,18 @@ class HomeTableBody extends StatelessWidget {
       tableRowInfo: cubit.getTableMidnightQiamInfo(),
       values: cubit.getTableMidnightQiamValues(),
       onTaps: cubit.getTableMidnightQiamOnTaps(),
-      lengthOfUsers: cubit.usersData.length,
+      lengthOfUsers: cubit.users.length,
+    );
+  }
+
+  TableRow _buildReadTabark(HomeCubit cubit) {
+    return _buildTableRow(
+      trueTarget: true,
+      falseTarget: false,
+      tableRowInfo: cubit.getTableReadTabarkInfo(),
+      values: cubit.getTableReadTabarkValues(),
+      onTaps: cubit.getTableReadTabarkOnTaps(),
+      lengthOfUsers: cubit.users.length,
     );
   }
 }
