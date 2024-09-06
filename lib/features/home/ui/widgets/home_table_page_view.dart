@@ -19,10 +19,8 @@ class HomeTablePageView extends HookWidget {
       listener: (context, state) {
         if (state is HomeLoadedState) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            controller.animateToPage(
-              context.read<HomeCubit>().dayIndex,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
+            controller.jumpToPage(
+              context.read<HomeCubit>().currentDayIndex,
             );
           });
         }
@@ -35,6 +33,7 @@ class HomeTablePageView extends HookWidget {
             child: TableShimmer(),
           );
         }
+
         return ExpandablePageView.builder(
           controller: controller,
           reverse: true,
@@ -48,7 +47,7 @@ class HomeTablePageView extends HookWidget {
             );
           },
           onPageChanged: cubit.updateDayIndex,
-          itemCount: cubit.usersData.first.data.length,
+          itemCount: cubit.daysInfo.length,
         );
       },
     );

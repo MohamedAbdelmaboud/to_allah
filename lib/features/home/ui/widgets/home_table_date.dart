@@ -14,7 +14,7 @@ class HomeTableDate extends StatelessWidget {
         final cubit = context.read<HomeCubit>();
         return Text(
           dateToString(
-            cubit.dates[cubit.dayIndex],
+            cubit.currentDayInfo.date,
             isArabic: true,
           ), // Display the date
           style: AppStyles.kufamStyle14,

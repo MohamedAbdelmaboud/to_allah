@@ -42,6 +42,7 @@ class _SplashViewState extends State<SplashView>
 
     // Navigate to login after 2 seconds
     Timer(const Duration(seconds: 2), () {
+      // LocalData.setIsLogin(false);
       LocalData.getIsLogin()
           ? context.go(AppRouter.home)
           : context.go(AppRouter.login);
