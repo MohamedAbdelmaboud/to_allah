@@ -105,6 +105,43 @@ class HomeCubit extends Cubit<HomeCubitState> {
     );
   }
 
+  Map<String, List<double>> getUsersDaysProgress() {
+    Map<String, List<double>> values = {};
+    for (var user in users) {
+      values[user.userAuth.username] = _getDaysProgress(user);
+    }
+    return values;
+  }
+
+  List<double> _getDaysProgress(UserModel user) {
+    List<double> values = [];
+    final currentDay = DateTime.now();
+    var date = user.daysInfo.first.date;
+    for (int i = 0; i < user.daysInfo.length; i++) {
+      values.add(_getDayProgress(user.daysInfo[i]));
+      if (date.day == currentDay.day &&
+          date.month == currentDay.month &&
+          date.year == currentDay.year) {
+        break;
+      }
+      date = date.add(const Duration(days: 1));
+    }
+    return values;
+  }
+
+  double _getDayProgress(DayInfo day) {
+    double progress = 0;
+    progress += day.eveningAzkar ? 1 : 0;
+    progress += day.midnightQiam ? 1 : 0;
+    progress += day.morningAzkar ? 1 : 0;
+    progress += day.prayInNabi ? 1 : 0;
+    progress += day.quranVerse ? 1 : 0;
+    progress += day.readTabark ? 1 : 0;
+    progress += day.prayInMasjid / 5;
+    progress += day.sunnah / 12;
+    return progress;
+  }
+
   // ** Morning Azkar **
   TableRowInfo getTableMorningAzkarInfo() {
     return TableRowInfo(
